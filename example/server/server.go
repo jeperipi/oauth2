@@ -13,13 +13,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-oauth2/oauth2/v4/generates"
+	"github.com/jeperipi/oauth2/v4/generates"
 
-	"github.com/go-oauth2/oauth2/v4/errors"
-	"github.com/go-oauth2/oauth2/v4/manage"
-	"github.com/go-oauth2/oauth2/v4/models"
-	"github.com/go-oauth2/oauth2/v4/server"
-	"github.com/go-oauth2/oauth2/v4/store"
+	"github.com/jeperipi/oauth2/v4/errors"
+	"github.com/jeperipi/oauth2/v4/manage"
+	"github.com/jeperipi/oauth2/v4/models"
+	"github.com/jeperipi/oauth2/v4/server"
+	"github.com/jeperipi/oauth2/v4/store"
 	"github.com/go-session/session"
 )
 

@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-oauth2/oauth2/v4"
-	"github.com/go-oauth2/oauth2/v4/errors"
+	"github.com/jeperipi/oauth2/v4"
+	"github.com/jeperipi/oauth2/v4/errors"
 )
 
 // NewDefaultServer create a default authorization server
@@ -265,16 +265,20 @@ func (s *Server) GetAuthorizeData(rt oauth2.ResponseType, ti oauth2.TokenInfo) m
 func (s *Server) HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) error {
 	ctx := r.Context()
 
+	fmt.Printf("HandleAuthorizeRequest started\n")
 	req, err := s.ValidationAuthorizeRequest(r)
 	if err != nil {
+		fmt.Printf("ValidationAuthorizeRequest error\n")
 		return s.handleError(w, req, err)
 	}
 
 	// user authorization
 	userID, err := s.UserAuthorizationHandler(w, r)
 	if err != nil {
+		fmt.Printf("UserAuthorizationHandler error\n")
 		return s.handleError(w, req, err)
 	} else if userID == "" {
+		fmt.Printf("UserId Nill error\n")
 		return nil
 	}
 	req.UserID = userID
@@ -283,6 +287,9 @@ func (s *Server) HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) 
 	if fn := s.AuthorizeScopeHandler; fn != nil {
 		scope, err := fn(w, r)
 		if err != nil {
+
+			fmt.Printf("AuthorizeScopeHandler error\n")
+
 			return err
 		} else if scope != "" {
 			req.Scope = scope
@@ -293,6 +300,8 @@ func (s *Server) HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) 
 	if fn := s.AccessTokenExpHandler; fn != nil {
 		exp, err := fn(w, r)
 		if err != nil {
+			fmt.Printf("AccessTokenExpHandler error\n")
+
 			return err
 		}
 		req.AccessTokenExp = exp
@@ -300,6 +309,8 @@ func (s *Server) HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) 
 
 	ti, err := s.GetAuthorizeToken(ctx, req)
 	if err != nil {
+		fmt.Printf("GetAuthorizeToken error\n")
+
 		return s.handleError(w, req, err)
 	}
 
@@ -307,6 +318,8 @@ func (s *Server) HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) 
 	if req.RedirectURI == "" {
 		client, err := s.Manager.GetClient(ctx, req.ClientID)
 		if err != nil {
+			fmt.Printf("get client error error\n")
+
 			return err
 		}
 		req.RedirectURI = client.GetDomain()
